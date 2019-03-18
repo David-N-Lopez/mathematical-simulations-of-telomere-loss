@@ -3,7 +3,7 @@ from helix_class import double_helix as dh
 import networkx as nx
 import random
 import matplotlib.pyplot as plt
-import sys
+
 
 base_pairs = 5500
 root_helix = dh(base_pairs,base_pairs,base_pairs,base_pairs)
@@ -79,8 +79,7 @@ while iteration < pd:
                 top_helix.set_parent(parent_helix)
                 top_helix.add_iter(iteration)
                 top_helix.set_top()
-                if not top_helix.is_senescent():
-                    array_at_height.append(top_helix)
+                array_at_height.append(top_helix)
 
             bottom_helix, didnt_replicate = replicate_bottom_helix_with_prob(parent_helix.get_bottom())
 
@@ -93,14 +92,7 @@ while iteration < pd:
                 bottom_helix.set_bottom()
 
                 # for every time a cell is senescent, then number to a count to retrieve how many cells died
-                if not bottom_helix.is_senescent():
-                    array_at_height.append(bottom_helix)
-                    # set parent helix as senescent and dont let its children replicate
-                else:
-                    if iteration in dictionary and parent_helix.is_:
-                        dictionary[iteration] += 1
-                    else:
-                        dictionary[iteration] = 1
+                array_at_height.append(bottom_helix)
 
         helix_array.append(array_at_height)
 
