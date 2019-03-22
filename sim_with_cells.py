@@ -60,10 +60,18 @@ class simulation_with_cells:
             # sim array will be a list of list that contain our matrices
             # cell_array makes a an array of cell objects from sim_array
             cell_array = make_cells_from_array(self.sim_array[self.iteration])
+            senescence_count = 0
+            for i, el in enumerate(cell_array):
+                if el.is_senescent():
+                    senescence_count += 1
+                    if len(cell_array) == senescence_count:
+                        return self.iteration
+                    del cell_array[i]
+
             # temp array will be appended to
             temp_array = []
             #  senescence_count will keep track of how many cells have become senescent
-            senescence_count = 0
+
             for cells in cell_array:
                 if cells.can_replicate():
                     for chromo_matrix in cells.get_chromosomes():
@@ -78,10 +86,6 @@ class simulation_with_cells:
                         temp_array.append(top_chromosome)
                         self.matrix_count += 2
                 else:
-                    senescence_count += 1
-                    if senescence_count == len(cell_array):
-                        return self.iteration
-
                     for matrix in cells.get_chromosomes():
                         temp_array.append(matrix)
 
@@ -99,12 +103,14 @@ class simulation_with_cells:
                 print(len(temp_array))
                 new_sample = resample(make_cells_from_array(temp_array),100)
                 return new_sample
-            print("simulation iterating for the {} th time".format(self.iteration))
-            print("current number of cells at iteration level: 2^{}".format(math.log(len(temp_array)/46,2)))
-            print("the number of PDs this iteration is: {}".format(math.log(self.matrix_count/46, 2)))
-            print("the percentage of senescent cells is : {} %".format((senescence_count/len(cell_array)*100)))
-            # This is just for graphing the percent increase
-            self.percent_array.append(senescence_count / len(cell_array) * 100)
+            if (len(temp_array) and len(cell_array))>0:
+                # print("simulation iterating for the {} th time".format(self.iteration))
+                # print("current number of cells at iteration level: 2^{}".format(math.log(len(temp_array)/46,2)))
+                # print("the number of PDs this iteration is {}".format(math.log(self.matrix_count/46, 2)))
+                # print("the percentage of senescent cells is : {} %".format((senescence_count/len(cell_array)*100)))
+                # print("number of active cells at given iteration {}".format(len(cell_array)))
+                # # This is just for graphing the percent increase
+                self.percent_array.append(senescence_count / len(cell_array) * 100)
 
 
 

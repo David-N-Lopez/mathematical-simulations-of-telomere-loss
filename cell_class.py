@@ -43,7 +43,7 @@ class cell:
         beta = 4
         base_pairs = 5500
         probability = alpha * (1 - (self.get_min() / base_pairs)) ** beta
-        if random.random() > probability and not self.is_senescent():
+        if random.random() > probability:
             condition = True
         return condition
 

@@ -6,28 +6,33 @@ import random
 plt.style.use('seaborn-whitegrid')
 base_pairs = 5500
 # root array is an array of 46 chromosome matrices
-root_array = [cm(base_pairs, base_pairs, base_pairs, base_pairs) for x in range(46)]
-# root cell will be used to initialize the simulation class
-
-# full_sim.start()
+array = []
+for i in range(100):
+    root_array = [cm(base_pairs, base_pairs, base_pairs, base_pairs) for x in range(46)]
+    # root cell will be used to initialize the simulation class
+    root_cell = cell(root_array)
+    full_sim = sm(root_cell, 8, 0)
+    x = full_sim.start()
+    array.append(x)
+    print(i+1, x)
 # x = range(len(full_sim.percent_array))
 # y = full_sim.percent_array
 # plt.plot(x, y, 'o', color='black');
 
-root_cell = cell(root_array)
-inst = sm(root_cell, 8, 23)
-array = inst.start()
-mother_cell = random.choice(array)
-mother_sim = sm(mother_cell, 8, 16)
-cell_culture = mother_sim.start()
-iteration_array = []
-for seed_cell in cell_culture:
-    seed_sim = sm(seed_cell, 7, 0)
-    # because of the upper bound, the start method will return a 200 cell array
-    iteration_array.append(seed_sim.start())
-plt.hist(iteration_array, bins=30)
-plt.ylabel('No of times')
-plt.xlabel("PD count")
+
+# array = inst.start()
+# mother_cell = random.choice(array)
+# mother_sim = sm(mother_cell, 8, 16)
+# cell_culture = mother_sim.start()
+# iteration_array = []
+# for seed_cell in cell_culture:
+#     seed_sim = sm(seed_cell, 7, 0)
+#     # because of the upper bound, the start method will return a 200 cell array
+#     iteration_array.append(seed_sim.start())
+print(array)
+plt.hist(array, bins=20)
+plt.ylabel('counts')
+plt.xlabel("PD")
 plt.show()
 
 # things that are missing: If a cell becomes senescent, then copy the cell, and keep it grouped.
