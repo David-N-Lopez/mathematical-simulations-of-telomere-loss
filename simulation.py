@@ -16,15 +16,18 @@ base_pairs = 5500
 #     x = full_sim.start()
 #     array.append(x)
 #     print(i+1, x)
-root_array = [cm(base_pairs, base_pairs, base_pairs, base_pairs) for x in range(46)]
-
-root_cell = cell(root_array)
-full_sim = sm(root_cell,8,0)
-full_sim.start()
-x = range(len(full_sim.percent_array))
-y = full_sim.percent_array
-print(y)
-plt.plot(x, y, 'o', color='black')
+a_80 = []
+for i in range(100):
+    root_array = [cm(base_pairs, base_pairs, base_pairs, base_pairs) for x in range(46)]
+    root_cell = cell(root_array)
+    full_sim = sm(root_cell,8,0)
+    a_80.append(full_sim.start())
+    print(i)
+print(a_80)
+# x = full_sim.population_doublings_array
+# y = full_sim.percent_array
+# print(y)
+# plt.plot(x, y, 'o', color='black')
 #
 #
 # # array = inst.start()
@@ -39,7 +42,7 @@ plt.plot(x, y, 'o', color='black')
 # print (array)
 
 
-# plt.hist(a_80, bins=100, range= [0,120], alpha=0.5, label='alpha = 0.8')
+plt.hist(a_80, bins=40, alpha=0.5, label='alpha = 0.8')
 # plt.hist(a_85, bins= 100,range= [0,120], alpha=0.5, label='alpha = 0.85')
 # plt.hist(a_90, bins=100, range= [0,120], alpha=0.5, label='alpha = 0.9')
 # plt.hist(a_95, bins=100,range= [0,120], alpha=0.5, label='alpha = 0.95')
@@ -48,8 +51,8 @@ plt.plot(x, y, 'o', color='black')
 #
 # plt.plot(x, y, 'o', color='blue');
 #
-plt.ylabel('percent senescence')
-plt.xlabel("attempted iteration")
+plt.ylabel('count')
+plt.xlabel("PDs")
 plt.legend(loc='upper right')
 plt.show()
 

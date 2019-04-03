@@ -58,30 +58,22 @@ def make_matrix_from_cells(cell_array):
     return matrix_array
 
 
-def get_senescent_cells(cell_array):
-    sen_cells = []
-    for index, cl in enumerate(cell_array):
-        if cl.is_senescent():
-            cl.make_senescent()
-            sen_cells.append(cl)
-            del cell_array[index]
-    return sen_cells
+def get_senescent_cells_and_cells(cell_array):
+    sen_cells = [x for x in cell_array if x.is_senescent()]
+    cell_array = list(set(cell_array)^set(sen_cells))
+    return sen_cells, cell_array
 
 
-def get_senescent_matrices(mat_array):
-    senescent_mat_array = []
-    for index, mat in enumerate(mat_array):
-        if mat.is_senescent:
-            senescent_mat_array.append(mat)
-            del mat_array[index]
-    return senescent_mat_array
+def get_senescent_matrices_and_mat(mat_array):
+    senescent_mat_array = [x for x in mat_array if x.is_senescent]
+
+    mat_array = list(set(mat_array)^ set(senescent_mat_array))
+    return senescent_mat_array, mat_array
 
 
 def make_cells_senescent(cell_array):
     for cl in cell_array:
         cl.is_cell_senescent = True
-
-
 
 
 class simulation_with_cells:
@@ -98,9 +90,10 @@ class simulation_with_cells:
         self.iteration = 0
         self.cond = True
         self.sim_array.append(self.cell.get_chromosomes())
-        self.matrix_count = 1
         self.percent_array = []
         self.total_population = 1
+        self.multiplier = 1
+        self.population_doublings_array = []
 
     def start(self):
 
@@ -109,17 +102,19 @@ class simulation_with_cells:
             # list of chromosome matrices at given level
             mat_array_at_iteration = self.sim_array[self.iteration]
             # separates the matrices part of senescent cell in the previous iteration
-            senescent_matrices = get_senescent_matrices(mat_array_at_iteration)
+            senescent_matrices, mat_array_at_iteration = get_senescent_matrices_and_mat(mat_array_at_iteration)
             senescent_cells = make_cells_from_array(senescent_matrices)
             # cell_array makes a an array of cell objects from sim_array
             cell_array = make_cells_from_array(mat_array_at_iteration)
-            senescent_cells += get_senescent_cells(cell_array)
+            temp_senescent_cells, cell_array = get_senescent_cells_and_cells(cell_array)
+            senescent_cells += temp_senescent_cells
             make_cells_senescent(senescent_cells)
 
             if len(cell_array) == 0:
-                return self.iteration
+                return self.population_doublings_array[-1]
             # temp array will be appended to
             temp_array = []
+            cell_divider_counter = 0
             # senescence_count will keep track of how many cells have become senescent
             for cells in cell_array:
                 if cells.can_replicate():
@@ -130,6 +125,7 @@ class simulation_with_cells:
                         top_chromosome.set_parent(parent_chromosomes)
                         temp_array.append(bottom_chromosome)
                         temp_array.append(top_chromosome)
+                    cell_divider_counter += 2
 
                 else:
                     for matrix in cells.get_chromosomes():
@@ -139,13 +135,15 @@ class simulation_with_cells:
             not_senescent_cells = make_cells_from_array(temp_array)
             total_cells = not_senescent_cells + senescent_cells
 
-
             # re-sampling if the sample goes beyond 2^upper bound of the parameters
             if len(total_cells) >= (2**(self.upper)):
+                self.multiplier *= (len(total_cells) / 2 ** (self.upper))
                 new_temp = resample(total_cells, (2**self.upper))
                 total_cells = new_temp
+
             # append cells to the next level
             self.sim_array.append(make_matrix_from_cells(total_cells))
+            self.total_population += cell_divider_counter*self.multiplier
 
             # if max_doublings is equal to zero then we want the simulation to run until its end
             # then we want to return a random sample of 200 cells
@@ -157,16 +155,18 @@ class simulation_with_cells:
             for cl in total_cells:
                 if cl.is_cell_senescent:
                     senescence_count += 1
-            print("the total number of senescent cells before resampling {}".format(len(senescent_cells)))
-            print("the total number of not senescent cells before re-sampling {}".format(len(not_senescent_cells)))
-            print("simulation iterating for the {} th time".format(self.iteration))
-            print("current number of cells at iteration level: 2^{}".format(math.log(len(total_cells),2)))
-                # print("the number of PDs this iteration is {}".format(math.log(self.matrix_count/46, 2)))
-            print("the percentage of senescent cells is : {} %".format((senescence_count/len(total_cells)*100)))
-                # print("number of active cells at given iteration {}".format(len(cell_array)))
-                # # This is just for graphing the percent increase
+            # print("the total number of senescent cells before resampling {}".format(len(senescent_cells)))
+            # print("the total number of not senescent cells before re-sampling {}".format(len(not_senescent_cells)))
+            # print("simulation iterating for the {} th time".format(self.iteration))
+            # print("current number of cells at iteration level: 2^{}".format(math.log(len(total_cells),2)))
+            # print("total number of population doublings {}".format(math.log(self.total_population,2)))
+            #     # print("the number of PDs this iteration is {}".format(math.log(self.matrix_count/46, 2)))
+            # print("the percentage of senescent cells is : {} %".format(((senescence_count/len(total_cells))*100)))
+            #     # print("number of active cells at given iteration {}".format(len(cell_array)))
+            #     # # This is just for graphing the percent increase
 
-            self.percent_array.append(senescence_count / len(total_cells) * 100)
+            self.percent_array.append((senescence_count / len(total_cells)) * 100)
+            self.population_doublings_array.append(math.log(self.total_population,2))
 
 
 
