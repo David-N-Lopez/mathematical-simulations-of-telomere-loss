@@ -10,7 +10,7 @@ dep_var = list(range(base_pairs, 0, -1))
 for i in dep_var:
     alpha = 0.8
     beta = 4
-    probability.append(alpha*(1-(i/base_pairs))**beta)
+    probability.append(1-(alpha*(1-(i/base_pairs))**beta))
 
 
 x = dep_var

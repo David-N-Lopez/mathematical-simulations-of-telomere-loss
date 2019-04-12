@@ -40,7 +40,7 @@ class cell:
     # check if the whole cell is senescent
     def can_replicate(self):
         condition = False
-        alpha = 0.8
+        alpha = 0.80
         beta = 4
         base_pairs = 5500
         probability = alpha * (1 - (self.get_min() / base_pairs)) ** beta

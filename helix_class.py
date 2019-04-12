@@ -1,4 +1,5 @@
 import random
+import math
 
 class chromosome_matrix():
 
@@ -30,18 +31,29 @@ class chromosome_matrix():
 
     def set_parent(self, parent):
         self.parent = parent
+    def probability(self, L):
+        B = 0.003561
+        C = 1776.6
+        D = 0.56846
+        probability = B*math.exp(-((math.log(L/C))/D)**2)
+        return probability
 
-    def iter_decrease_with_probability(self):
-        alpha = 0.8
-        beta = 4
-        base_pairs = 5500
-        probability = alpha*(1-(self.get_min()/base_pairs))**beta
-        #print("{} is given by 1 minus {}".format(probability,self.get_min()/base_pairs))
-        if random.random() > probability:
-            rand_val_a = int(random.uniform(50, 200))
-            rand_val_d = int(random.uniform(50, 200))
-            self.A -= rand_val_a
-            self.D -= rand_val_d
+    def abrupt_top_shortening(self):
+        L = self.B
+        probability = self.probability(L)
+        if random.random() < probability:
+            H = int(random.uniform(100, 300))
+            print("halu")
+            self.B,self.D = H,H
+
+
+    def abrupt_bottom_shortening(self):
+        L = self.C
+        probability = self.probability(L)
+        if random.random() < probability:
+            H = int(random.uniform(100, 300))
+            print("hello")
+            self.A,self.C = H,H
 
     def iter_decrease(self):
         rand_val_a = int(random.uniform(50, 200))

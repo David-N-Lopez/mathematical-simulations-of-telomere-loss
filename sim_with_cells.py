@@ -23,6 +23,7 @@ import math
 def replicate_top_chromosome(arr):
     A, B = arr[0], arr[1]
     new_top = cm(A, B, A, B)
+    new_top.abrupt_top_shortening()
     new_top.iter_decrease()
     return new_top
 
@@ -31,6 +32,7 @@ def replicate_bottom_chromosome(arr):
     # get a[1,0] and a[1,1] from array
     C, D = arr[0], arr[1]
     new_bottom = cm(C, D, C, D)
+    new_bottom.abrupt_bottom_kshortening()
     new_bottom.iter_decrease()
     return new_bottom
 
@@ -69,6 +71,7 @@ def get_senescent_matrices_and_mat(mat_array):
 
     mat_array = list(set(mat_array)^ set(senescent_mat_array))
     return senescent_mat_array, mat_array
+
 
 
 def make_cells_senescent(cell_array):
@@ -125,7 +128,7 @@ class simulation_with_cells:
                         top_chromosome.set_parent(parent_chromosomes)
                         temp_array.append(bottom_chromosome)
                         temp_array.append(top_chromosome)
-                    cell_divider_counter += 2
+                    cell_divider_counter += 1
 
                 else:
                     for matrix in cells.get_chromosomes():
