@@ -41,18 +41,17 @@ class chromosome_matrix():
     def abrupt_top_shortening(self):
         L = self.B
         probability = self.probability(L)
-        if random.random() < probability:
+        random_num = random.random()
+        if random_num < probability:
             H = int(random.uniform(100, 300))
-            print("halu")
             self.B,self.D = H,H
-
 
     def abrupt_bottom_shortening(self):
         L = self.C
         probability = self.probability(L)
-        if random.random() < probability:
+        random_num = random.random()
+        if random_num < probability:
             H = int(random.uniform(100, 300))
-            print("hello")
             self.A,self.C = H,H
 
     def iter_decrease(self):
