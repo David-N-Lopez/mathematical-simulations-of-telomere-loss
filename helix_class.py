@@ -31,6 +31,7 @@ class chromosome_matrix():
 
     def set_parent(self, parent):
         self.parent = parent
+
     def probability(self, L):
         B = 0.003561
         C = 1776.6

@@ -43,7 +43,6 @@ def get_senescent_cells_from_previous(cell_array):
     return sen_cells, cell_array
 
 
-
 def make_cells_senescent(cell_array):
     for cl in cell_array:
         cl.is_cell_senescent = True
@@ -67,6 +66,8 @@ class simulation_with_cells:
         self.total_population = 1
         self.multiplier = 1
         self.population_doublings_array = []
+        self.shortest_length_array = []
+        self.resample_num = 200
 
     def start(self):
 
@@ -111,12 +112,16 @@ class simulation_with_cells:
             # if max_doublings is equal to zero then we want the simulation to run until its end
             # then we want to return a random sample of 200 cells
             if self.max_doublings != 0 and self.max_doublings <= math.log(self.total_population,2):
-                new_sample = resample(total_cells,200)
+                new_sample = resample(total_cells, self.resample_num)
                 return new_sample
             senescence_count = 0
+            smallest_cell_average = 0
             for cl in total_cells:
                 if cl.is_cell_senescent:
                     senescence_count += 1
+                smallest_cell_average += cl.get_min()
+            smallest_cell_average /= len(total_cells)
+
             # print("the total number of senescent cells before resampling {}".format(len(senescent_cells)))
             # print("the total number of not senescent cells before re-sampling {}".format(len(not_senescent_cells)))
             # print("simulation iterating for the {} th time".format(self.iteration))
@@ -129,6 +134,7 @@ class simulation_with_cells:
 
             self.percent_array.append((senescence_count / len(total_cells)) * 100)
             self.population_doublings_array.append(math.log(self.total_population,2))
+            self.shortest_length_array.append(smallest_cell_average)
 
 
 

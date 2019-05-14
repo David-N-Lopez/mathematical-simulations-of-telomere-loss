@@ -9,8 +9,8 @@ base_pairs = 8000
 probability = []
 dep_var = list(range(base_pairs, 0, -1))
 for i in dep_var:
-    B = 0.003561
-    C = 1776.6
+    B = 0.004561 #max height
+    C = 1776.6    # marks the point of the peak
     D = 0.56846
     probability.append(B * math.exp(-((math.log(i / C)) / D) ** 2))
 
@@ -23,3 +23,4 @@ plt.plot(x, y, '.', color='blue')
 plt.ylabel('probability')
 plt.xlabel("shortest telomere length")
 plt.show()
+
