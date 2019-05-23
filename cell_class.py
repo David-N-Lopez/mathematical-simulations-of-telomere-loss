@@ -4,8 +4,8 @@ import random
 def replicate_top_chromosome(arr):
     A, B = arr[0], arr[1]
     new_top = cm(A, B, A, B)
-    new_top.abrupt_top_shortening()
     new_top.iter_decrease()
+    new_top.abrupt_top_shortening()
     return new_top
 
 
@@ -13,8 +13,8 @@ def replicate_bottom_chromosome(arr):
     # get a[1,0] and a[1,1] from array
     C, D = arr[0], arr[1]
     new_bottom = cm(C, D, C, D)
-    new_bottom.abrupt_bottom_shortening()
     new_bottom.iter_decrease()
+    new_bottom.abrupt_bottom_shortening()
     return new_bottom
 
 
@@ -79,7 +79,11 @@ class cell:
         alpha = 0.80
         beta = 4
         base_pairs = 5500
-        probability = alpha * (1 - (self.get_min() / base_pairs)) ** beta
+        shortest_chromosome = self.get_min()
+        if shortest_chromosome < 0:
+            shortest_chromosome = 0
+
+        probability = alpha * (1 - (shortest_chromosome/ base_pairs)) ** beta
         if random.random() > probability:
             condition = True
         return condition
@@ -98,6 +102,13 @@ class cell:
     def make_senescent(self):
         for chromosome in self.chromosome_array:
             chromosome.is_senescent = True
+
+    def get_mean_telomere(self):
+        telomere_lengths = 0
+        for chromosome in self.chromosome_array:
+            telomere_lengths += chromosome.get_mean()
+        return telomere_lengths/46
+
 
 
 

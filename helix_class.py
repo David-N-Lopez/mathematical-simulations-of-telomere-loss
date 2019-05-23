@@ -37,11 +37,16 @@ class chromosome_matrix():
         C = 1776.6
         D = 0.56846
         probability = B*math.exp(-((math.log(L/C))/D)**2)
+        #1999 paper shortening:
+
+        # probability = math.exp(((L-30)/6.65))+10
         return probability
 
     def abrupt_top_shortening(self):
         L = self.B
         probability = self.probability(L)
+        if probability < 0:
+            probability = 0
         random_num = random.random()
         if random_num < probability:
             H = int(random.uniform(100, 300))
@@ -50,6 +55,8 @@ class chromosome_matrix():
     def abrupt_bottom_shortening(self):
         L = self.C
         probability = self.probability(L)
+        if probability < 0:
+            probability = 0
         random_num = random.random()
         if random_num < probability:
             H = int(random.uniform(100, 300))
@@ -65,7 +72,13 @@ class chromosome_matrix():
         return [[self.A, self.B], [self.C, self.D]]
 
     def get_min(self):
-        return min(self.A, self.B, self.C, self.D)
+        minimum = min(self.A, self.B, self.C, self.D)
+        if minimum < 0:
+            minimum = 0
+        return minimum
+
+    def get_mean(self):
+        return (self.A+self.B+self.C+self.D)/4
 
     def has_zero(self):
         if self.get_min() <= 0:

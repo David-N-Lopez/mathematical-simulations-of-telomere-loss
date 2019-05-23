@@ -9,11 +9,11 @@ smallest_array = []
 base_pairs = 5500
 root_array = [cm(base_pairs, base_pairs, base_pairs, base_pairs) for x in range(46)]
 root_cell = cell(root_array)
-root_sim = sm(root_cell, 9, 23)
+root_sim = sm(root_cell, 10, 23)
 root_sim.resample_num = 1
 mother_cell = root_sim.start()
-mother_sim = sm(mother_cell[0], 9, 16)
-mother_sim.resample_num = 150
+mother_sim = sm(mother_cell[0], 10, 16)
+mother_sim.resample_num = 80
 sample_cells = mother_sim.start()
 
 
@@ -33,13 +33,15 @@ for cl in sample_cells:
     sample_base = cl.get_min()
     sample_array = [cm(sample_base,sample_base,sample_base,sample_base) for x in range(46)]
     sample_cell = cell(sample_array)
-    full_sim = sm(sample_cell, 6, 0)
+    full_sim = sm(sample_cell, 7, 0)
     x = full_sim.start()
     print(x)
     a_80.append(x+39)
+
     # if x == 1:
     #     shortest_pd_array = root_sim.population_doublings_array + full_sim.population_doublings_array
-    #     shortest_avg_array = root_sim.shortest_length_array+ full_sim.shortest_length_array
+    #     shortest_avg_array = root_sim.length_average_array + full_sim.length_average_array
+    #
     # if x >= 22:
     #     avg_pd = []
     #     for i in full_sim.population_doublings_array:
@@ -47,7 +49,7 @@ for cl in sample_cells:
     #     print(avg_pd)
     #     pd_array = root_sim.population_doublings_array + avg_pd
     #     print(len(pd_array))
-    #     avg_array = root_sim.shortest_length_array + full_sim.shortest_length_array
+    #     avg_array = root_sim.length_average_array + full_sim.length_average_array
     #     print(len(avg_array))
 
 # y_short = np.asarray(shortest_avg_array)
@@ -99,7 +101,7 @@ for cl in sample_cells:
 
 
 print(a_80)
-plt.title("cell 'death' histogram of 150 runs and B = 1e-2")
+plt.title("cell 'death' histogram of 150 runs and B = 3e-3 ")
 plt.hist(a_80, bins=40, alpha=0.80, label='alpha = 0.80')
 plt.ylabel('counts')
 plt.xlabel("population doublings")

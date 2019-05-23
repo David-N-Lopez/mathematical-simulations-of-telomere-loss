@@ -9,14 +9,15 @@ chromosome = cm(base_pairs, base_pairs, base_pairs, base_pairs)
 print("chromosome matrix starting with: {}".format(chromosome.get_matrix()))
 chromosome.iter_decrease()
 print("chromosome after calling iter_decrease: {}".format(chromosome.get_matrix()))
-chromosome.abrupt_bottom_shortening()
-chromosome.abrupt_bottom_shortening()
+chromosome.abrupt_bottom_shortening(2)
+chromosome.abrupt_bottom_shortening(2)
 
 # Cell level tests
 new_chromosome = cm(base_pairs, base_pairs, base_pairs, base_pairs)
 starting_cell = cell([cm(base_pairs, base_pairs, base_pairs, base_pairs) for x in range(46)])
 print("the smallest telomere of the cell: {}".format(starting_cell.get_min))
-print(starting_cell.replicate())
+x = starting_cell.replicate(40)
+print(x)
 
 
 # Simulation Level Tests

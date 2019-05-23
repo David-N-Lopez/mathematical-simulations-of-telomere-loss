@@ -67,6 +67,7 @@ class simulation_with_cells:
         self.multiplier = 1
         self.population_doublings_array = []
         self.shortest_length_array = []
+        self.length_average_array = []
         self.resample_num = 200
 
     def start(self):
@@ -116,11 +117,14 @@ class simulation_with_cells:
                 return new_sample
             senescence_count = 0
             smallest_cell_average = 0
+            length_average = 0
             for cl in total_cells:
                 if cl.is_cell_senescent:
                     senescence_count += 1
                 smallest_cell_average += cl.get_min()
+                length_average += cl.get_mean_telomere()
             smallest_cell_average /= len(total_cells)
+            length_average/= len(total_cells)
 
             # print("the total number of senescent cells before resampling {}".format(len(senescent_cells)))
             # print("the total number of not senescent cells before re-sampling {}".format(len(not_senescent_cells)))
@@ -133,7 +137,8 @@ class simulation_with_cells:
             #     # # This is just for graphing the percent increase
 
             self.percent_array.append((senescence_count / len(total_cells)) * 100)
-            self.population_doublings_array.append(math.log(self.total_population,2))
+            self.length_average_array.append(length_average)
+            self.population_doublings_array.append(math.log(self.total_population, 2))
             self.shortest_length_array.append(smallest_cell_average)
 
 
