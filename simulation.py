@@ -9,11 +9,11 @@ smallest_array = []
 base_pairs = 5500
 root_array = [cm(base_pairs, base_pairs, base_pairs, base_pairs) for x in range(46)]
 root_cell = cell(root_array)
-root_sim = sm(root_cell, 10, 23)
+root_sim = sm(root_cell, 8, 23)
 root_sim.resample_num = 1
 mother_cell = root_sim.start()
-mother_sim = sm(mother_cell[0], 10, 16)
-mother_sim.resample_num = 80
+mother_sim = sm(mother_cell[0], 8, 16)
+mother_sim.resample_num = 100
 sample_cells = mother_sim.start()
 
 
@@ -33,7 +33,7 @@ for cl in sample_cells:
     sample_base = cl.get_min()
     sample_array = [cm(sample_base,sample_base,sample_base,sample_base) for x in range(46)]
     sample_cell = cell(sample_array)
-    full_sim = sm(sample_cell, 7, 0)
+    full_sim = sm(sample_cell, 6, 0)
     x = full_sim.start()
     print(x)
     a_80.append(x+39)
@@ -101,8 +101,8 @@ for cl in sample_cells:
 
 
 print(a_80)
-plt.title("cell 'death' histogram of 150 runs and B = 3e-3 ")
-plt.hist(a_80, bins=40, alpha=0.80, label='alpha = 0.80')
+plt.title("cell death with abrupt shortening by: 2400")
+plt.hist(a_80, bins=25, alpha=0.80, label='alpha = 0.80')
 plt.ylabel('counts')
 plt.xlabel("population doublings")
 plt.show()

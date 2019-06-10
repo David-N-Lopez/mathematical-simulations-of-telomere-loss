@@ -49,8 +49,9 @@ class chromosome_matrix():
             probability = 0
         random_num = random.random()
         if random_num < probability:
-            H = int(random.uniform(100, 300))
-            self.B,self.D = H,H
+            H = 2400
+            self.B -= H
+            self.D -= H
 
     def abrupt_bottom_shortening(self):
         L = self.C
@@ -59,8 +60,9 @@ class chromosome_matrix():
             probability = 0
         random_num = random.random()
         if random_num < probability:
-            H = int(random.uniform(100, 300))
-            self.A,self.C = H,H
+            H = 2400
+            self.A -= H
+            self.C -= H
 
     def iter_decrease(self):
         rand_val_a = int(random.uniform(50, 200))

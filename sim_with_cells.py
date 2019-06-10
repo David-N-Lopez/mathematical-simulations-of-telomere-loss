@@ -124,7 +124,7 @@ class simulation_with_cells:
                 smallest_cell_average += cl.get_min()
                 length_average += cl.get_mean_telomere()
             smallest_cell_average /= len(total_cells)
-            length_average/= len(total_cells)
+            length_average /= len(total_cells)
 
             # print("the total number of senescent cells before resampling {}".format(len(senescent_cells)))
             # print("the total number of not senescent cells before re-sampling {}".format(len(not_senescent_cells)))
