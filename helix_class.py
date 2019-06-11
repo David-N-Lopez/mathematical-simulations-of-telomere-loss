@@ -32,43 +32,49 @@ class chromosome_matrix():
     def set_parent(self, parent):
         self.parent = parent
 
-    def probability(self, L):
-        B = 0.003561
-        C = 1776.6
-        D = 0.56846
-        probability = B*math.exp(-((math.log(L/C))/D)**2)
-        #1999 paper shortening:
-
-        # probability = math.exp(((L-30)/6.65))+10
-        return probability
-
-    def abrupt_top_shortening(self):
-        L = self.B
-        probability = self.probability(L)
-        if probability < 0:
-            probability = 0
-        random_num = random.random()
-        if random_num < probability:
-            H = 2400
-            self.B -= H
-            self.D -= H
-
-    def abrupt_bottom_shortening(self):
-        L = self.C
-        probability = self.probability(L)
-        if probability < 0:
-            probability = 0
-        random_num = random.random()
-        if random_num < probability:
-            H = 2400
-            self.A -= H
-            self.C -= H
-
     def iter_decrease(self):
         rand_val_a = int(random.uniform(50, 200))
         rand_val_d = int(random.uniform(50, 200))
         self.A -= rand_val_a
         self.D -= rand_val_d
+    def elongate(self):
+        p = 0.026
+        random_number = random.random()
+        y = -math.log(1 - random_number) / p
+        return y
+    def elongate_or_shorten(self):
+
+        Lo = 500
+        beta = 0.045
+        if self.A > Lo:
+            probability_A = 1/(1+beta*(self.A-Lo))
+        else:
+            probability_A = 1
+        # print(probability_A)
+        if random.random()< probability_A:
+            # do elongation
+            elongate_by = self.elongate()
+            self.A += elongate_by
+
+        else:
+            # do shortening
+            decrease_by = int(random.uniform(50,200))
+            self.A -= decrease_by
+        if self.D > Lo:
+            probability_D = 1/(1+beta*(self.A-Lo))
+        else:
+            probability_D = 1
+        # print(probability_D)
+        if random.random() < probability_D:
+            # do elongation
+            elongate_by = self.elongate()
+            self.D += elongate_by
+
+        else:
+            # do shortening
+            decrease_by = int(random.uniform(50, 200))
+            self.D -= decrease_by
+
 
     def get_matrix(self):
         return [[self.A, self.B], [self.C, self.D]]
@@ -89,11 +95,4 @@ class chromosome_matrix():
             return False
 
 
-
-
-
-# x = double_helix(base_pairs,base_pairs,base_pairs,base_pairs)
-# print(x.A)
-# x.rand_decrease('A')
-# print(x.A)
 

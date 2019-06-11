@@ -2,7 +2,8 @@ from helix_class import chromosome_matrix as cm
 from cell_class import cell
 import random
 import math
-
+import matplotlib.pyplot as plt
+plt.style.use('seaborn-whitegrid')
 
 # Start with 46 matrices
 # Randomly group matrices in 46
@@ -70,6 +71,7 @@ class simulation_with_cells:
         self.length_average_array = []
         self.resample_num = 200
 
+
     def start(self):
 
         # While loops through each level of the binary tree
@@ -125,6 +127,12 @@ class simulation_with_cells:
                 length_average += cl.get_mean_telomere()
             smallest_cell_average /= len(total_cells)
             length_average /= len(total_cells)
+            print(length_average)
+            print(math.log(self.total_population, 2))
+            population_doublings = math.log(self.total_population, 2)
+            if population_doublings >= 100:
+                plt.plot(self.population_doublings_array, self.length_average_array, '.', color='blue')
+                plt.show()
 
             # print("the total number of senescent cells before resampling {}".format(len(senescent_cells)))
             # print("the total number of not senescent cells before re-sampling {}".format(len(not_senescent_cells)))

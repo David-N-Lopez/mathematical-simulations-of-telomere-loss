@@ -4,8 +4,7 @@ import random
 def replicate_top_chromosome(arr):
     A, B = arr[0], arr[1]
     new_top = cm(A, B, A, B)
-    new_top.iter_decrease()
-    new_top.abrupt_top_shortening()
+    new_top.elongate_or_shorten()
     return new_top
 
 
@@ -13,8 +12,7 @@ def replicate_bottom_chromosome(arr):
     # get a[1,0] and a[1,1] from array
     C, D = arr[0], arr[1]
     new_bottom = cm(C, D, C, D)
-    new_bottom.iter_decrease()
-    new_bottom.abrupt_bottom_shortening()
+    new_bottom.elongate_or_shorten()
     return new_bottom
 
 
