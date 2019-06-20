@@ -44,13 +44,13 @@ class cell:
             print(cell.get_matrix())
 
     # is_sencescent returns a boolean if any telomere length is less than or equal to zero
-    def is_senescent(self):
+    def is_not_senescent(self):
         condition = False
         for chromosome in self.chromosome_array:
             if chromosome.has_zero() == True:
                 condition = True
                 break
-        return condition
+        return not condition
 
     # was senescent returns a boolean if the cell was previously set as senescent
     def was_senescent(self):

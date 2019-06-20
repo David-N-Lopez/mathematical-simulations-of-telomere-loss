@@ -44,7 +44,7 @@ class chromosome_matrix():
         return y
     def elongate_or_shorten(self):
 
-        Lo = 500
+        Lo = 1000
         beta = 0.045
         if self.A > Lo:
             probability_A = 1/(1+beta*(self.A-Lo))
