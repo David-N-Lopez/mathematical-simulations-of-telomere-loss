@@ -2,17 +2,19 @@ from helix_class import chromosome_matrix as cm
 import random
 
 def replicate_top_chromosome(arr):
+    #
     A, B = arr[0], arr[1]
     new_top = cm(A, B, A, B)
-    new_top.elongate_or_shorten()
+    new_top.elongate()
     return new_top
 
 
 def replicate_bottom_chromosome(arr):
     # get a[1,0] and a[1,1] from array
     C, D = arr[0], arr[1]
-    new_bottom = cm(C, D, C, D)
-    new_bottom.elongate_or_shorten()
+    shortening_by = int(random.uniform(50,200))
+    new_bottom = cm(C-shortening_by, D, C, D-shortening_by)
+    new_bottom.elongate()
     return new_bottom
 
 

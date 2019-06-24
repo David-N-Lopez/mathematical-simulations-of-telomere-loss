@@ -31,7 +31,7 @@ def alive_cells_after_apoptosis(cell_array):
         cell_min = cell.get_min()
 
         # alpha value in the JCB paper was set to 0.001
-        alpha = 0.0002
+        alpha = 0.001
         probability = math.exp(-alpha * cell_min)
         if random.random() > probability:
             new_cell_array.append(cell)
@@ -108,8 +108,8 @@ class simulation_with_cells:
 
             # append cells to the next level
             self.sim_array.append(total_cells)
-            self.total_population += cell_divider_counter * self.multiplier
-            self.total_population_array.append(cell_divider_counter * self.multiplier)
+            self.total_population += (cell_divider_counter+1) * self.multiplier
+            self.total_population_array.append(math.log10((cell_divider_counter+1)* self.multiplier))
 
             # if max_doublings is equal to zero then we want the simulation to run until its end
             # then we want to return a random sample of 200 cells
