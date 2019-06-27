@@ -14,7 +14,7 @@ class chromosome_matrix():
         self.bottom = False
         self.is_senescent = False
         self.M = 10
-        self.Kr = 0.01
+        self.Kr = 0.1
         self.status = {'normal': True,'single mutation': False, 'double mutation': False}
 
     def add_iter(self, num):
@@ -69,12 +69,6 @@ class chromosome_matrix():
 
     def get_mean(self):
         return (self.A+self.B+self.C+self.D)/4
-    def mutate(self, cell_mutation_type):
-        if cell_mutation_type == "m":
-            self.set_M(10)
-        if cell_mutation_type == "k":
-            self.set_Kr(0.01)
-
     def has_zero(self):
         if self.get_min() <= 0:
             return True

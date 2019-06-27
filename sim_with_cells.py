@@ -73,9 +73,7 @@ class simulation_with_cells:
         # While loops through each level of the binary tree
         while self.cond:
             cell_array_at_iteration = self.sim_array[self.iteration]
-
             cell_array = alive_cells_after_apoptosis(cell_array_at_iteration)
-
             # temp array will be appended to
             temp_array = []
             cell_divider_counter = 0
@@ -97,15 +95,15 @@ class simulation_with_cells:
             total_cells = not_senescent_cells
 
             # print statements to check for updates:
+            print("iteration number: {}".format(self.iteration))
             print("cell at iteration: {}".format(len(cell_array_at_iteration)))
             print("current cell array: {}".format(len(cell_array)))
             print("dead cells after apoptosis:{} ".format(len(cell_array_at_iteration) - len(cell_array)))
-
             print("cell array after eliminating senescent cells: {}".format(len(total_cells)))
             print("population multiplier: {}".format(self.multiplier))
-            print("cell divider counter: {}".format(cell_divider_counter+0.0000001))
+            print("cell divider counter: {}".format(cell_divider_counter+1))
             print("population at this iteration: {}".format((cell_divider_counter + 1) * self.multiplier))
-            print("population at this iteration in log scale: {}".format(math.log10((cell_divider_counter + 0.0000001) * self.multiplier)))
+            print("population at this iteration in log scale: {}".format(math.log10((cell_divider_counter + 1) * self.multiplier)))
 
             print("*********************")
 
@@ -118,15 +116,12 @@ class simulation_with_cells:
             # append cells to the next level
             self.sim_array.append(total_cells)
             self.total_population += (cell_divider_counter+1) * self.multiplier
-            self.total_population_array.append(math.log10((cell_divider_counter+0.1)* self.multiplier))
-
-
+            self.total_population_array.append(math.log10((cell_divider_counter+1)* self.multiplier))
 
             #kill the simulation when the population reaches 0
             if cell_divider_counter == 0 or self.iteration > 600:
                 self.population_doublings_array.append(math.log(self.total_population, 2))
                 return True
-
 
             # if max_doublings is equal to zero then we want the simulation to run until its end
             # then we want to return a random sample of 200 cells
@@ -137,28 +132,13 @@ class simulation_with_cells:
             senescence_count = 0
             smallest_cell_average = 0
             length_average = 0
-            normal_running = 0
-            mutated_single = 0
-            mutated_double = 0
             for cl in total_cells:
                 if cl.is_cell_senescent:
                     senescence_count += 1
                 smallest_cell_average += cl.get_min()
                 length_average += cl.get_mean_telomere()
-                if cl.mutation_stage == 0:
-                    normal_running += 1
-                if cl.mutation_stage == 1:
-                    mutated_single += 1
-                if cl.mutation_stage >1:
-                    mutated_double += 1
             smallest_cell_average /= len(total_cells)
             length_average /= len(total_cells)
-            # print(normal_running/len(total_cells))
-            # print(mutated_single/ len(total_cells))
-            # print(mutated_double/ len(total_cells))
-            self.normal_cells.append(normal_running/len(total_cells))
-            self.single_mutated.append((mutated_single/len(total_cells)))
-            self.double_mutated.append(mutated_double/len(total_cells))
             self.percent_array.append((senescence_count / len(total_cells)) * 100)
             self.length_average_array.append(length_average)
             self.population_doublings_array.append(math.log(self.total_population, 2))
