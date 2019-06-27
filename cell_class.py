@@ -34,7 +34,8 @@ class cell:
     def __init__(self, chromosome_array):
         self.chromosome_array = chromosome_array
         self.is_cell_senescent = False
-
+        self.mutation_stage = 0
+        self.mutation_type = None
         if len(chromosome_array) != 46:
             print("cell not properly initialized, {} elements missing".format(len(chromosome_array)-46))
 
@@ -78,7 +79,7 @@ class cell:
         condition = False
         alpha = 0.80
         beta = 4
-        base_pairs = 5500
+        base_pairs = 4000
         shortest_chromosome = self.get_min()
         if shortest_chromosome < 0:
             shortest_chromosome = 0
@@ -87,21 +88,51 @@ class cell:
         if random.random() > probability:
             condition = True
         return condition
-
     def replicate(self):
         temp_array = []
+        will_mutate = False
+        mutation_type = ["k","m"]
+        cell_mutation_type = None
+        if random.random() <= 0.01:
+            will_mutate = True
+            if self.mutation_stage == 0:
+                if random.random() <= 0.5:
+                    cell_mutation_type = mutation_type[0]
+                    self.mutation_type = cell_mutation_type
+                else:
+                    cell_mutation_type = mutation_type[1]
+                    self.mutation_type = cell_mutation_type
+            if self.mutation_stage == 1:
+                if self.mutation_type == "m":
+                    cell_mutation_type = "k"
+                elif self.mutation_type == "k":
+                    cell_mutation_type = "m"
+                else:
+                    print("there is a problem here")
+
+
+
         for parent_chromosomes in self.get_chromosomes():
             bottom_chromosome = replicate_bottom_chromosome(parent_chromosomes.get_bottom())
+            # if will_mutate == True:
+            #     bottom_chromosome.mutate(cell_mutation_type)
             bottom_chromosome.set_parent(parent_chromosomes)
             top_chromosome = replicate_top_chromosome(parent_chromosomes.get_top())
+            # if will_mutate == True:
+            #     top_chromosome.mutate(cell_mutation_type)
             top_chromosome.set_parent(parent_chromosomes)
             temp_array.append(bottom_chromosome)
             temp_array.append(top_chromosome)
-        return make_cells_from_array(temp_array)
+        cells = make_cells_from_array(temp_array)
+        # for cell in cells:
+        #     if will_mutate == True:
+        #         cell.mutation_stage +=1
+        return cells
     # makes all of the matrices that constitute it as senescent.
     def make_senescent(self):
         for chromosome in self.chromosome_array:
             chromosome.is_senescent = True
+
 
     def get_mean_telomere(self):
         telomere_lengths = 0

@@ -13,6 +13,9 @@ class chromosome_matrix():
         self.top = False
         self.bottom = False
         self.is_senescent = False
+        self.M = 10
+        self.Kr = 0.01
+        self.status = {'normal': True,'single mutation': False, 'double mutation': False}
 
     def add_iter(self, num):
         self.iter = num
@@ -32,6 +35,12 @@ class chromosome_matrix():
     def set_parent(self, parent):
         self.parent = parent
 
+    def set_M(self, value):
+        self.M = value
+
+    def set_Kr(self, value):
+        self.Kr = value
+
     def iter_decrease(self):
         rand_val_a = int(random.uniform(50, 200))
         rand_val_d = int(random.uniform(50, 200))
@@ -43,9 +52,8 @@ class chromosome_matrix():
         y = -math.log(1 - random_number) / p
         return y
     def elongate(self):
-        M= 10
-        Kr = 0.1
-        probability = (2*M)/((1+M)*(1+math.sqrt(1+4*Kr*self.get_min()/1+M)))
+
+        probability = (2*self.M)/((1+self.M)*(1+math.sqrt(1+4*self.Kr*self.get_min()/1+self.M)))
         if random.random() <= probability:
             self.A += self.elongate_by()
             self.D += self.elongate_by()
@@ -61,6 +69,11 @@ class chromosome_matrix():
 
     def get_mean(self):
         return (self.A+self.B+self.C+self.D)/4
+    def mutate(self, cell_mutation_type):
+        if cell_mutation_type == "m":
+            self.set_M(10)
+        if cell_mutation_type == "k":
+            self.set_Kr(0.01)
 
     def has_zero(self):
         if self.get_min() <= 0:
